@@ -45,6 +45,7 @@ import java.util.stream.Collectors;
 
 /**
  * ShardingSphere data source.
+ * ShardingSphere数据源
  */
 public final class ShardingSphereDataSource extends AbstractDataSourceAdapter implements AutoCloseable {
     

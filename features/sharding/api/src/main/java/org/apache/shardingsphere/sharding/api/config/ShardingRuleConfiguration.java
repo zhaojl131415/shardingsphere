@@ -36,6 +36,7 @@ import java.util.Map;
 
 /**
  * Sharding rule configuration.
+ * 分片规则配置。
  */
 @Getter
 @Setter
