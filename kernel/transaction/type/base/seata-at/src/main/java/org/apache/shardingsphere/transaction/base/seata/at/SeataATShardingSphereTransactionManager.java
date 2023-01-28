@@ -44,6 +44,7 @@ import java.util.Map;
 
 /**
  * Seata AT transaction manager.
+ * Seata AT模式 集成 ShardingSphere事务管理器
  */
 public final class SeataATShardingSphereTransactionManager implements ShardingSphereTransactionManager {
     
@@ -100,17 +101,26 @@ public final class SeataATShardingSphereTransactionManager implements ShardingSp
     public void begin() {
         begin(globalTXTimeout);
     }
-    
+
+    /**
+     * 开启全局事务
+     * @param timeout Transaction timeout in SECONDS
+     */
     @Override
     @SneakyThrows(TransactionException.class)
     public void begin(final int timeout) {
         ShardingSpherePreconditions.checkState(timeout >= 0, TransactionTimeoutException::new);
         checkSeataATEnabled();
         GlobalTransaction globalTransaction = GlobalTransactionContext.getCurrentOrCreate();
+        // 开启全局事务
         globalTransaction.begin(timeout * 1000);
         SeataTransactionHolder.set(globalTransaction);
     }
-    
+
+    /**
+     * 全局事务提交
+     * @param rollbackOnly rollback only
+     */
     @Override
     @SneakyThrows(TransactionException.class)
     public void commit(final boolean rollbackOnly) {
@@ -122,7 +132,10 @@ public final class SeataATShardingSphereTransactionManager implements ShardingSp
             RootContext.unbind();
         }
     }
-    
+
+    /**
+     * 全局事务回滚
+     */
     @Override
     @SneakyThrows(TransactionException.class)
     public void rollback() {
